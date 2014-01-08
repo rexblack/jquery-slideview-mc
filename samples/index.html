@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+  
+  <head>
+    
+    <title>SlideView Example</title>
+    
+    <link href="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/css/bootstrap.min.css" rel="stylesheet">
+    
+    <script src="http://codeorigin.jquery.com/jquery-1.10.2.min.js"></script>
+    
+    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.3/js/bootstrap.min.js"></script>
+    
+    <script src="../src/js/jquery.slideview-mc.js"></script>
+    
+    <script>
+      
+      $(function() {
+        
+        $('#slideview').slideview({
+          endless: true
+           
+        });
+        
+        // init pagination
+        $('.pagination li a').on('click', function(e) {
+          
+          var slideview = $('#slideview').data('slideview');
+          var parent = $(this).parent();
+          if (parent.is('li:first')) {
+            slideview.previous();
+          } else if (parent.is('li:last')) {
+            slideview.next();
+          } else {
+            slideview.slideTo($(this).parent().index() - 1);
+          }
+          e.preventDefault();
+        });
+        
+      });
+      
+    </script>
+    
+    <style>
+      
+      #slideview {
+        width: 400px;
+        height: 300px;
+        border: 1px solid #adadad;
+      }
+      
+    </style>
+    
+  </head>
+  
+  <body>
+    
+    <header class="subhead" id="overview">
+      <div class="container">
+        <h1>jquery-slideview-mc</h1>
+        <p class="lead">JQuery Slider Component
+        </p>
+      </div>
+    </header>
+    
+    <div class="container">
+    
+      <div id="slideview">
+        <div class="slide">
+          <h1>Slide 1</h1>
+          Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu
+        </div>
+        <div class="slide">
+          <h1>Slide 2</h1>
+          Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu
+        </div>
+        <div class="slide">
+          <h1>Slide 3</h1>
+          Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu
+        </div>
+      </div>
+      
+      <ul class="pagination">
+        <li><a href="#">&laquo;</a></li>
+        <li><a href="#">1</a></li>
+        <li><a href="#">2</a></li>
+        <li><a href="#">3</a></li>
+        <li><a href="#">&raquo;</a></li>
+      </ul>
+
+    </div>
+    
+  </body>
+  
+</html>
