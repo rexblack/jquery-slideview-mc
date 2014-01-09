@@ -13,7 +13,7 @@
     transitionStyle: 'swipe', 
     transitionDuration: 750, 
     transitionEasing: 'swing', 
-    scrollStyle: 'transform3d', 
+    scrollStyle: 'position', 
     transitionCSS: true, 
     linkSelector: null, 
     itemSelector: ".slide", 
@@ -382,6 +382,13 @@
       layout.call(this);
     };
     
+    function getClientWidth() {
+      return element.getBoundingClientRect().width;
+    }
+    
+    function getClientHeight() {
+      return element.getBoundingClientRect().height;
+    }
   
     function getElementPosition(item, style) {
       var transformStyle = getVendorStyle('transform');
@@ -420,7 +427,7 @@
         
       x = !isNaN(x) ? x : 0;
       y = !isNaN(y) ? y : 0;
-        
+      
       return {x: x, y: y};
     }
     
@@ -460,7 +467,7 @@
       for (var i = 0; i < items.length; i++) {
         var item = items[i];
         var p = getElementPosition(item);
-        if ($(item).is(":visible") && p.x >= x && p.x < x + element.clientWidth) {
+        if ($(item).is(":visible") && p.x >= x && p.x < x + getClientWidth()) {
           return item;
         }
       }
@@ -497,13 +504,15 @@
       if (!options.endless) {
         if (x < 0) {
           x = 0;
-        } else if (x > (slideView.size() - 1) * element.clientWidth) {
-          x = (slideView.size() - 1) * element.clientWidth;
+        } else if (x > (slideView.size() - 1) * getClientWidth()) {
+          x = (slideView.size() - 1) * getClientWidth();
         }
       }
 
-      var xp = -x / element.clientWidth * 100;
-      var yp = -y / element.clientHeight * 100;
+      var xp = -x / getClientWidth() * 100;
+      var yp = -y / getClientHeight() * 100;
+      
+     
       
      if (currentTransition) {
        
@@ -575,14 +584,14 @@
           var m = props[prop].match(/(-?[\d\.]*)([a-z%]*)?/);
           if (m) {
             if (prop == "left") {
-              p.x = m[2] == "%" ? - m[1] / 100 * element.clientWidth : - m[1];
+              p.x = m[2] == "%" ? - m[1] / 100 * getClientWidth() : - m[1];
             } else {
-              p.y = m[2] == "%" ? - m[1] / 100 * element.clientHeight : - m[1];
+              p.y = m[2] == "%" ? - m[1] / 100 * getClientHeight() : - m[1];
             }
           }
         } else if (prop.indexOf('transform') >= 0) {
           // TODO: implement transform support
-          p = getTranslate(props[prop], element.clientWidth, element.clientHeight);
+          p = getTranslate(props[prop], getClientWidth(), getClientHeight());
         }
       }
       return p;
@@ -600,11 +609,11 @@
       var elem = getElementAtScrollPosition(s.x, s.y);
       return elem;
       // 
-      var si = Math.floor(s.x / element.clientWidth) * element.clientWidth;
+      var si = Math.floor(s.x / getClientWidth()) * getClientWidth();
       for (var i = 0; i < items.length; i++) {
         var elem = items[i];
         var p = getElementPosition(elem);
-        if (p.x >= si && p.x < si + element.clientWidth) {
+        if (p.x >= si && p.x < si + getClientWidth()) {
           return elem;
         }
       }
@@ -618,8 +627,8 @@
       for (var i = 0; i < items.length; i++) {
         var elem = items[i];
         var p = getElementPosition(elem);
-        if (elem.style.display != 'none' && p.x > s.x - element.clientWidth && p.x < s.x + element.clientWidth) {
-          vItems.push({item: elem, scrollIndex: p.x / element.clientWidth});
+        if (elem.style.display != 'none' && p.x > s.x - getClientWidth() && p.x < s.x + getClientWidth()) {
+          vItems.push({item: elem, scrollIndex: p.x / getClientWidth()});
         }
       }
       return vItems;
@@ -652,7 +661,7 @@
       var s = getScrollPosition();
       var p = getElementPosition(item);
       
-      var currentPage = Math.floor(s.x / element.clientWidth);
+      var currentPage = Math.floor(s.x / getClientWidth());
       var currentItem = getCurrentItem();
       var currentIndex = $.inArray(currentItem, items);
       
@@ -689,14 +698,14 @@
       currentPrevIndex = currentPrevIndex < 0 ? currentPrevIndex + items.length : currentPrevIndex;
       var currentPrevItem = items[currentPrevIndex];
       
-      var scrollOffset = s.x / element.clientWidth - currentPage;
+      var scrollOffset = s.x / getClientWidth() - currentPage;
       
       
       if (direction > 0 && currentNextItem == item) {
-        setScrollPosition((currentPage + 1) * element.clientWidth, 0, duration);
+        setScrollPosition((currentPage + 1) * getClientWidth(), 0, duration);
         return;
       } else if (direction < 0 && currentPrevItem == item) {
-        setScrollPosition((currentPage - 1) * element.clientWidth, 0, duration);
+        setScrollPosition((currentPage - 1) * getClientWidth(), 0, duration);
         return;
       }
 
@@ -763,7 +772,8 @@
       }
          
       setLayoutItems(lItems);
-      setScrollPosition((currentPage + direction) * element.clientWidth, 0, duration);
+      
+      setScrollPosition((currentPage + direction) * getClientWidth(), 0, duration);
       
       
     }
@@ -812,7 +822,7 @@
       
       var s = getScrollPosition();
       
-      if (s.x % element.clientWidth == 0) {
+      if (s.x % getClientWidth() == 0) {
         
         layoutItems.call(this);
         var currentItem = getCurrentItem();
@@ -975,15 +985,15 @@
     }
     
     this.getPageIndex = function() {
-      return Math.floor(getScrollPosition().x / element.clientWidth % this.size());
+      return Math.floor(getScrollPosition().x / getClientWidth() % this.size());
     };
     
     this.getScrollWidth = function() {
-      return items.length * element.clientWidth;
+      return items.length * getClientWidth();
     };
     
     this.getScrollHeight = function() {
-      return items.length * element.clientHeight;
+      return items.length * getClientHeight();
     };
 
     this.next = function() {
@@ -1016,7 +1026,7 @@
       for (var i = 0; i < items.length; i++) {
         var item = items[i];
         var p = getElementPosition(item, options.scrollStyle);
-        if (p.x > s.x - element.clientWidth && p.x < s.x + element.clientWidth) {
+        if (p.x > s.x - getClientWidth() && p.x < s.x + getClientWidth()) {
           array.push({item: item, p: p});
         }
       }
@@ -1052,7 +1062,7 @@
         for (var i = 0; i < items.length; i++) {
           var elem = items[i];
           var p = getElementPosition(elem);
-          if ($(elem).is(":visible") && p.x > s.x - element.clientWidth && p.x < s.x + element.clientWidth) {
+          if ($(elem).is(":visible") && p.x > s.x - getClientWidth() && p.x < s.x + getClientWidth()) {
             var eIndex = amod(slideView.indexOf(elem), items.length);
             if (vIndex == null) {
             vIndex = eIndex;
@@ -1070,11 +1080,11 @@
         
         if (hasValidOrder) {
           
-          var scrollIndex = Math.floor(s.x / element.clientWidth);
-          var offset = s.x / element.clientWidth - scrollIndex;
+          var scrollIndex = Math.floor(s.x / getClientWidth());
+          var offset = s.x / getClientWidth() - scrollIndex;
           var elem = getElementAtScrollPosition(s.x, 0);
           var itemIndex = slideView.indexOf(elem);
-          var x = (itemIndex + offset) * element.clientWidth;
+          var x = (itemIndex + offset) * getClientWidth();
           
           invalidateLayoutItems();
           setScrollPosition(x, 0, 0);
@@ -1107,8 +1117,8 @@
       invalidateScrollPosition();
       var s = getScrollPosition();
       
-      var scrollIndex = Math.floor(s.x / element.clientWidth);
-      var scrollOffset = s.x / element.clientWidth - scrollIndex;
+      var scrollIndex = Math.floor(s.x / getClientWidth());
+      var scrollOffset = s.x / getClientWidth() - scrollIndex;
  
       var lItems = getLayoutItems();
       
@@ -1131,7 +1141,7 @@
           }
         } else {
           
-          d = s.x % element.clientWidth;
+          d = s.x % getClientWidth();
         }
       }
 
@@ -1164,8 +1174,8 @@
           setElementPosition(item, x * 100 + "%", p.y + "px", options.scrollStyle);
           
           // return bounds.left >= viewport.left && bounds.right <= viewport.right 
-          var isVisibleAtScrollPosition = x + element.clientWidth > s.x && x < s.x + element.clientWidth;
-          isVisibleAtScrollPosition = x + 1 > s.x / element.clientWidth && x < s.x / element.clientWidth + 1;
+          var isVisibleAtScrollPosition = x + getClientWidth() > s.x && x < s.x + getClientWidth();
+          isVisibleAtScrollPosition = x + 1 > s.x / getClientWidth() && x < s.x / getClientWidth() + 1;
           if (!isVisibleAtScrollPosition) {
             // reset scrolling
             item.scrollTop = 0;
@@ -1196,6 +1206,7 @@
     
     function layout() {
       
+      $(element).css("width", "100%");
       $element.css({
         'overflow': 'hidden'
       });
@@ -1598,7 +1609,6 @@
         
         touchCurrentPos = {x: touchX, y: touchY};
         
-        //var o = Math.abs(dx) / Math.abs(dy);
         var o = dy == 0 ? Math.abs(dx) : Math.abs(dx) / Math.abs(dy);
         
         var dragStart = false;
@@ -1660,14 +1670,14 @@
         
         touchCurrentPos = null;
         
-        // currentTransition = null;
+        
         invalidateScrollPosition();
 
         if (o >= 1 && dx != 0) {
           
           var s = getScrollPosition();
           
-          var scrollIndex = Math.floor(s.x / element.clientWidth);
+          var scrollIndex = Math.floor(s.x / getClientWidth());
           
           var duration = options.transitionDuration;
           
@@ -1675,26 +1685,26 @@
             
             if (dx < 0) {
               //slideView.next()
-              setScrollPosition(Math.ceil(s.x / element.clientWidth) * element.clientWidth, 0, duration);
+              setScrollPosition(Math.ceil(s.x / getClientWidth()) * getClientWidth(), 0, duration);
             } else if (dx > 0) {
               //slideView.previous()
-              setScrollPosition(Math.floor(s.x / element.clientWidth) * element.clientWidth, 0, duration);
+              setScrollPosition(Math.floor(s.x / getClientWidth()) * getClientWidth(), 0, duration);
             } else {
-              setScrollPosition(Math.round(s.x / element.clientWidth) * element.clientWidth, 0, duration);
+              setScrollPosition(Math.round(s.x / getClientWidth()) * getClientWidth(), 0, duration);
             }
 
           } else {
             
-            var scrollOffset = s.x / element.clientWidth - Math.round(s.x / element.clientWidth);;
+            var scrollOffset = s.x / getClientWidth() - Math.round(s.x / getClientWidth());;
             
             if (dx > 0 && scrollOffset > 0.5) {
               //slideView.next()
-              setScrollPosition(Math.ceil(s.x / element.clientWidth) * element.clientWidth, 0, duration);
+              setScrollPosition(Math.ceil(s.x / getClientWidth()) * getClientWidth(), 0, duration);
             } else if (dx < 0 && scrollOffset < -0.5) {
               //slideView.previous();
-              setScrollPosition(Math.floor(s.x / element.clientWidth) * element.clientWidth, 0, duration);
+              setScrollPosition(Math.floor(s.x / getClientWidth()) * getClientWidth(), 0, duration);
             } else {
-              setScrollPosition(Math.round(s.x / element.clientWidth) * element.clientWidth, 0, duration);
+              setScrollPosition(Math.round(s.x / getClientWidth()) * getClientWidth(), 0, duration);
             }
 
           }
@@ -1910,7 +1920,7 @@
       items = initialItems;
 
       // init layout
-      setScrollPosition(masterItemIndex * element.clientWidth, 0, 0);
+      setScrollPosition(masterItemIndex * getClientWidth(), 0, 0);
       
       
       layout.call(this);
