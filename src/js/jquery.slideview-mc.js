@@ -183,7 +183,7 @@
           // css
           
           for (var i = 0; i < vendorEvents.length; i++) {
-            element.removeEventListener(vendorEvents[i], completeHandler);
+            $(element).unbind(vendorEvents[i], completeHandler);
           }
           window.clearTimeout(transitionTimeout);
           transitionTimeout = null;
@@ -331,7 +331,7 @@
     
     function isItem(item) {
       return item.nodeType == 1
-        && $.inArray(item.localName.toLowerCase(), ["br", "script", "link", "map"]) == -1
+        && $.inArray(item.tagName.toLowerCase(), ["br", "script", "link", "map"]) == -1
         || item.nodeType == 3 && $.trim(item.nodeValue);
     }
     

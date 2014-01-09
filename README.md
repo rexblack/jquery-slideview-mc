@@ -90,19 +90,19 @@ Methods
     <th>Name</th><th>Description</th><th>Return</th>
   </tr>
   <tr>
-    <td>add</td><td>adds the specified slide to the component</td><td>void</td>
+    <td>add</td><td>adds the specified item to the component</td><td>void</td>
   </tr>
   <tr>
-    <td>addAll</td><td>adds the specified slides to the component</td><td>void</td>
+    <td>addAll</td><td>adds the specified items to the component</td><td>void</td>
   </tr>
   <tr>
-    <td>remove</td><td>removes the specified slide to the component</td><td>void</td>
+    <td>remove</td><td>removes the specified item from the component</td><td>void</td>
   </tr>
   <tr>
-    <td>removeAll</td><td>removes the specified slides to the component</td><td>void</td>
+    <td>removeAll</td><td>removes the specified items from the component</td><td>void</td>
   </tr>
   <tr>
-    <td>size</td><td>get the size of the slide collection</td><td>int</td>
+    <td>size</td><td>get the size of the item collection</td><td>int</td>
   </tr>
   <tr>
     <td>invalidate</td><td>Refreshes the component</td><td>void</td>
@@ -117,9 +117,9 @@ Methods
     <td>previous</td><td>show the previous slide</td><td>void</td>
   </tr>
   <tr>
-    <td>getPosition</td><td>returns the current slide index</td><td>int</td>
+    <td>getPosition</td><td>returns current slide index</td><td>int</td>
   </tr>
   <tr>
-    <td>getCurrentItem</td><td>returns the current slide element</td><td>element</td>
+    <td>getCurrentItem</td><td>returns current slide element</td><td>element</td>
   </tr>
 </table>
