@@ -26,7 +26,7 @@
     // callbacks
     slideLoaded: null, 
     slideBefore: null, 
-    slideComplete: null, 
+    slideComplete: null 
   };
   
   
@@ -1151,7 +1151,7 @@
             container.appendChild(item);
             $item.css({
               position: 'absolute', 
-              width: '100%', 
+              width: '100%'
             });
             
           }
