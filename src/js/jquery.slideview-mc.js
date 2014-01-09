@@ -16,18 +16,17 @@
     scrollStyle: 'transform3d', 
     transitionCSS: true, 
     linkSelector: null, 
-    itemSelector: "slide", 
+    itemSelector: ".slide", 
     slideClass: 'slide', 
-    // callbacks
-    slideLoaded: null, 
-    slideBefore: null, 
-    slideComplete: null, 
-    visibleItems: 5, 
     preloadImages: false, 
     mouseDragging: false, 
     userInteraction: true, 
     currentSlideClass: 'current-slide', 
-    locationControl: true
+    locationControl: true, 
+    // callbacks
+    slideLoaded: null, 
+    slideBefore: null, 
+    slideComplete: null, 
   };
   
   
@@ -625,7 +624,6 @@
       }
       return vItems;
     }
-    
     
     function inViewport (element) {
 
