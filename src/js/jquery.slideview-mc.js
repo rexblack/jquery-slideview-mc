@@ -382,8 +382,20 @@
       layout.call(this);
     };
     
+    function getClientRect() {
+      // ie8 compatible
+      var rect = element.getBoundingClientRect();
+      var result = {}
+      for (var x in rect) {
+        result[x] = rect[x];
+      }
+      result.width = typeof(rect.width) == "number" ? rect.width : rect.right - rect.left;
+      result.height = typeof(rect.height) == "number" ? rect.height : rect.bottom - rect.top;
+      return result;
+    }
+    
     function getClientWidth() {
-      return element.getBoundingClientRect().width;
+      return Number(getClientRect().width.toFixed(4));
     }
     
     function getClientHeight() {
@@ -427,6 +439,9 @@
         
       x = !isNaN(x) ? x : 0;
       y = !isNaN(y) ? y : 0;
+      
+      // x = Math.ceil(x);
+      // y = Math.ceil(y);
       
       return {x: x, y: y};
     }
@@ -512,7 +527,6 @@
       var xp = -x / getClientWidth() * 100;
       var yp = -y / getClientHeight() * 100;
       
-     
       
      if (currentTransition) {
        
@@ -661,7 +675,9 @@
       var s = getScrollPosition();
       var p = getElementPosition(item);
       
-      var currentPage = Math.floor(s.x / getClientWidth());
+      // + s.x % getClientWidth()
+      var currentPage = Math.floor((s.x) / getClientWidth());
+      
       var currentItem = getCurrentItem();
       var currentIndex = $.inArray(currentItem, items);
       
@@ -793,6 +809,7 @@
       
       switch (slideOptions.transitionType) {
 
+        case 'swipe': 
         case 'scroll': 
         default:
          
@@ -1003,6 +1020,7 @@
     };
     
     this.previous = function() {
+      
       this.slideTo(getCurrentIndex() - 1, {
         direction: -1
       });
